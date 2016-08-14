@@ -3,13 +3,11 @@
  * @package testplugin
  */
 /*
-Plugin Name: spell-checker
+Plugin Name: paradox
 Plugin URI: localhost
-Description: A nepali spell-checker plugin. It uses a python script in the background. The script is taken from our very own
-        Gumali : https://github.com/tnagorra/nspell  
-        Be awesome
+Description: A test plugin 
 Version: 3.1.11
-Author: Babel
+Author: paradox
 Author URI: localhost
 */
 ?>
@@ -98,15 +96,14 @@ function input($post_id)
 
     file_put_contents("/home/paradox/test.txt", utf8_decode($GLOBALS['nepali']));
 
-    $command = "python /home/paradox/Nish/Programming/Python/projects/nspell/nspellwrapper.py";
-    //$command = "python /home/paradox/test.py";
-    $args = utf8_decode($_COOKIE['nepali_text']);
-    //$text = exec($command . ' ' . $args);
-    $text = shell_exec($command);
+    //$command = "python /home/paradox/Nish/Programming/Python/projects/nspell/";
+    $args = $_COOKIE['nepali_text'];
+    $dir = "/home/paradox/public_html/wordpress/wp-content/plugins/testplugin/nspell";
+    chdir($dir);
+    file_put_contents("./data/test/input.txt", utf8_decode($args))
+    $text = shell_exec("./nspellwrapper.py " );
     //$text = substr($text, 1);
-    //file_put_contents("/home/paradox/test.txt", utf8_decode($GLOBALS['nepali']));
-    file_put_contents("/home/paradox/test.txt", $text);
-    $GLOBALS['test'] = $text;
+    $GLOBALS['test'] = "hello";
 ?>
     <script type="text/javascript">
     window.onload = function test()
