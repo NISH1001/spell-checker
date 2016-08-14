@@ -68,12 +68,12 @@ function tokenize($content)
 ?>
     <script type="text/javascript">
         var splitted = [<?php echo '"'.implode('","', $exploded).'"' ?>];
-        var regex = RegExp("[A-Za-z0-9!@#$%^&*()<>/?]+");
+        var regex = RegExp("[A-Za-z0-9!@#$%^&*()<>/?।]+");
         var nepali = [];
         for(var i =0; i<splitted.length; ++i)
         {
             var test = regex.test(splitted[i]);
-            if(test == false)
+            if(test == false && nepali.indexOf(splitted[i])<0)
             {
                 nepali.push(splitted[i]);
             }
@@ -94,26 +94,31 @@ function input($post_id)
     tokenize($post->post_content);
     $GLOBALS['nepali'] = $_COOKIE['nepali_text'];
 
-    file_put_contents("/home/paradox/test.txt", utf8_decode($GLOBALS['nepali']));
+    //file_put_contents("/home/paradox/test.txt", utf8_decode($GLOBALS['nepali']));
 
     //$command = "python /home/paradox/Nish/Programming/Python/projects/nspell/";
     $args = $_COOKIE['nepali_text'];
-    $dir = "/home/paradox/public_html/wordpress/wp-content/plugins/testplugin/nspell";
+    $dir = "/home/paradox/public_html/wordpress/wp-content/plugins/testplugin/nspell/";
     chdir($dir);
-    file_put_contents("./data/test/input.txt", utf8_decode($args))
-    $text = shell_exec("./nspellwrapper.py " );
-    //$text = substr($text, 1);
-    $GLOBALS['test'] = "hello";
+    file_put_contents("./data/test/input.txt", utf8_decode($args));
+    //$command = escapeshellcmd("/usr/bin/python nspellwrapper.py");
+    //$text = shell_exec("python nspellwrapper.py");
+    //$text = shell_exec("python nspellwrapper.py");
+    $out = "";
+    $text = exec("./nspellwrapper.py");
+    $text = substr($text, 1);
+    $GLOBALS['test'] = $text;
 ?>
     <script type="text/javascript">
     window.onload = function test()
     {
         var text = "<?php echo $GLOBALS['test']; ?>";
-        text = decodeURIComponent(escape(text));
-        //alert(decodeURIComponent(escape(readCookie("nepali_text"))));
+        //text = decodeURIComponent(escape(text));
         alert(text);
-        //var spelling = document.getElementById("spell");
-        //spelling.innerHTML = text;
+        //alert(decodeURIComponent(escape(readCookie("nepali_text"))));
+        //alert(text);
+        var spelling = document.getElementById("spell");
+        spelling.innerHTML = text;
         //alert(decodeURIComponent(escape(text)));
     }
     </script>
